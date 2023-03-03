@@ -5,12 +5,12 @@
  * @tree: const pointer to root node to begin traversal at.
  * @func: pointer to function to call on tree node's data.
  */
-void binary_tree_preorder(const binary_tree_t *tree, void (*func)(int))
+void binary_tree_inorder(const binary_tree_t *tree, void (*func)(int))
 {
 	if (tree == NULL || func == NULL)
 		return;
 
 	func(tree->n);
-	binary_tree_preorder(tree->left, func); /*Recursively traverse left*/
-	binary_tree_preorder(tree->right, func); /*Recursively traverse right*/
+	binary_tree_inorder(tree->left, func); /*Recursively traverse left*/
+	binary_tree_inorder(tree->right, func); /*Recursively traverse right*/
 }
