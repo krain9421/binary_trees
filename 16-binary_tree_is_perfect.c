@@ -1,53 +1,60 @@
 #include "binary_trees.h"
 
 /**
- * is_perfect - helper function to check if a tree is perfect
- * @tree: tree to check
+ * depth - utility function to find depth of node
+ * @node: this node to check
  *
- * Return: 0 if is not a perfect or other number that is the level of height
+ * Return: depth of node
  */
-int is_perfect(const binary_tree_t *tree)
+int depth(const binary_tree_t *node)
 {
-	int left = 0, right = 0;
+	int d = 0;
 
-	if (tree->left && tree->right)
+	while (node != NULL)
 	{
-		left = 1 + is_perfect(tree->left);
-		right = 1 + is_perfect(tree->right);
-		if (right == 1 && right != 0 && left != 0)
-			return (right);
-		return (0);
+		d++;
+		node = node->left;
 	}
-	else if (!tree->left && !tree->right)
-	{
-		return (1);
-	}
-	else
-	{
-		return (0);
-	}
+	return (d);
 }
 
 /**
- * binary_tree_is_perfect - function that checks if a binary
- * tree is perfect.
- * @tree: pointer to the root node of the tree to check
+ * is_perfect - recursive function to check if binary tree
+ * is perfect.
+ * @root: root node
+ * @d: depth
+ * @level: level
  *
- * Return: 1 if tree is perfect, 0 otherwise.
+ * Return: 1 if perfect, 0 otherwise
+ */
+int is_perfect(const binary_tree_t *root, int d, int level)
+{
+	if (root == NULL)
+		return (1);
+
+	if (root->left == NULL && root->right == NULL)
+		return (d == level + 1);
+
+	if (root->left == NULL || root->right == NULL)
+		return (0);
+
+	/*Left and right subtrees must be perfect*/
+	return (is_perfect(root->left, d, level + 1) &&
+		is_perfect(root->right, d, level + 1));
+}
+
+/**
+ * binary_tree_is_perfect - wrapper function to check if
+ * a tree is perfect.
+ * @tree: tree to check
+ *
+ * Return: 1 is it is or 0 if not
  */
 int binary_tree_is_perfect(const binary_tree_t *tree)
 {
-	int res = 0;
+	int d = 0;
 
-	if (tree == NULL)
-		return (0);
-
-	else
-	{
-		res = is_perfect(tree);
-		if (res != 0)
-			return (1);
-
-		return (0);
-	}
+	d = depth(tree);
+	return (is_perfect(tree, d, -1));
 }
+
